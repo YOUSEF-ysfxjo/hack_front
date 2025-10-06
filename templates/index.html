@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="upload-container">
+            <h2 class="text-center mb-4">Upload Parent Images</h2>
+            <p class="text-center text-muted mb-4">Upload clear photos of both parents to find matching children</p>
+            
+            <form action="{{ url_for('upload_files') }}" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                Mother's Photo
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <img id="motherPreview" src="https://via.placeholder.com/300x300?text=Mother's+Photo" class="img-fluid rounded" style="max-height: 200px; width: auto;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="file" class="form-control" id="motherImg" name="mother_img" accept="image/*" required onchange="previewImage(this, 'motherPreview')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                Father's Photo
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <img id="fatherPreview" src="https://via.placeholder.com/300x300?text=Father's+Photo" class="img-fluid rounded" style="max-height: 200px; width: auto;">
+                                </div>
+                                <div class="form-group">
+                                    <input type="file" class="form-control" id="fatherImg" name="father_img" accept="image/*" required onchange="previewImage(this, 'fatherPreview')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Find Matching Children</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const file = input.files[0];
+    const reader = new FileReader();
+    
+    reader.onloadend = function() {
+        preview.src = reader.result;
+    }
+    
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "https://via.placeholder.com/300x300?text=Preview";
+    }
+}
+</script>
+{% endblock %}

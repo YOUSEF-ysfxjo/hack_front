@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Parent Images</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 text-center mb-3 mb-md-0">
+                        <h5>Mother</h5>
+                        <img src="{{ url_for('static', filename='uploads/' + mother_image) }}" class="img-fluid rounded" style="max-height: 250px; width: auto;">
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h5>Father</h5>
+                        <img src="{{ url_for('static', filename='uploads/' + father_image) }}" class="img-fluid rounded" style="max-height: 250px; width: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Matching Children (Alpha: {{ alpha }})</h4>
+            </div>
+            <div class="card-body">
+                {% if results %}
+                    <div class="row">
+                        {% for result in results %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card result-card h-100 {% if result.low_confidence %}border-warning{% endif %}">
+                                    <div class="card-header {% if result.low_confidence %}bg-warning{% else %}bg-success text-white{% endif %}">
+                                        Match {{ loop.index }} - {{ result.display_score }}%
+                                        {% if result.low_confidence %}(Low Confidence){% endif %}
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <img src="{{ url_for('static', filename='children/' + result.child_name) }}" 
+                                             class="img-fluid rounded mb-3" 
+                                             style="max-height: 200px; width: auto;"
+                                             onerror="this.src='https://via.placeholder.com/300x300?text=Child+Image+Not+Found'">
+                                        <h5>Child #{{ result.child_id }}</h5>
+                                        <div class="progress">
+                                            <div class="progress-bar {% if result.low_confidence %}bg-warning{% else %}bg-success{% endif %}" 
+                                                 role="progressbar" 
+                                                 style="width: {{ result.display_score }}%" 
+                                                 aria-valuenow="{{ result.display_score }}" 
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="100">
+                                                {{ result.display_score }}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        No matching children found above the confidence threshold.
+                    </div>
+                {% endif %}
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">Try Another Match</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+flask==2.3.3
+numpy
+opencv-python-headless
+insightface
+flask-sqlalchemy
+python-dotenv
+Pillow
+werkzeug==2.3.7
